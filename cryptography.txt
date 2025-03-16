@@ -1,0 +1,55 @@
+5b). Secure Data Storage, Transmission, and Digital Signatures with GnuPG
+
+generate a gpg key:
+```gpg --full-generate-key```
+
+check keys:
+```gpg --list-keys```
+
+step 2:  Secure Data Storage
+
+- create a sample file:
+echo "" > file.txt
+
+- encrypt the file
+```gpg -e -r spacex@gmail.com secret.txt```
+creates secret.txt.gpg
+
+verify its encrypted: by catting
+
+- decrypt the file
+
+```gpg -d secret.txt.gpg > secret_decrypted.txt```
+
+step 3: secure data transmission
+ -export pubkey to share
+```gpg --armor --export spacex@gmail.com > mypubkey.asc```
+
+ - import recipients public key
+```gpg --import fpubkey```
+
+encrypt the file for them
+```gpg -e -r friend@gmail.com secret.txt```
+
+step 4: create a nd verify digital signatures
+ - sign a file:
+```gpg --sign file.txt```
+ - verify signature
+```gpg --verify secret.txt.gpg```
+
+5a). Configuring S/MIME for Email Communication
+
+ - generate private key
+```openssl genrsa -out email_key.pem 2048```
+
+ - generate certificate signing request
+
+```openssl req -new -key email_key.pem -out email.csr```
+ - Generate a Self-Signed Certificate
+
+Step 3: Combine Key and Certificate into a PKCS12 File where Email clients typically require a .p12 file:
+
+
+```openssl x509 -req -days 365 -in email.csr -signkey email_key.pem -out email_cert.pem```
+
+
